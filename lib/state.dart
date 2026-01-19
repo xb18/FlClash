@@ -87,9 +87,17 @@ class GlobalState {
       packageInfo = await PackageInfo.fromPlatform();
       final configMap = await preferences.getConfigMap();
       final migrationData = await migration.migrationIfNeeded(configMap);
-      final config = migrationData.configMap != null
+      final newConfigMap = migrationData.configMap;
+
+      final config = newConfigMap != null
           ? Config.fromJson(migrationData.configMap!)
           : Config(themeProps: defaultThemeProps);
+      if (!stringAndObjectMapEntryIterableEquality.equals(
+        configMap?.entries,
+        newConfigMap?.entries,
+      )) {
+        await preferences.saveConfig(config);
+      }
       final configOverrides = buildConfigOverrides(config);
       await database.restore(
         migrationData.profiles,
