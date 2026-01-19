@@ -90,7 +90,7 @@ class GlobalState {
       final newConfigMap = migrationData.configMap;
 
       final config = newConfigMap != null
-          ? Config.fromJson(migrationData.configMap!)
+          ? Config.fromJson(newConfigMap)
           : Config(themeProps: defaultThemeProps);
       if (!stringAndObjectMapEntryIterableEquality.equals(
         configMap?.entries,
