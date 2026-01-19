@@ -452,7 +452,7 @@ Future<MigrationData> _oldToNowTask(
   }
   final currentProfileId = configMap['currentProfileId'];
   configMap['currentProfileId'] = currentProfileId != null
-      ? idMap[currentProfileId]
+      ? idMap[currentProfileId.toString()]
       : null;
 
   return MigrationData(
