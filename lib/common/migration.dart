@@ -3,6 +3,7 @@ import 'package:fl_clash/models/models.dart';
 
 class Migration {
   static Migration? _instance;
+  late int _oldVersion;
 
   Migration._internal();
 
@@ -16,13 +17,17 @@ class Migration {
   Future<MigrationData> migrationIfNeeded(
     Map<String, Object?>? configMap,
   ) async {
-    final version = await preferences.getVersion();
+    _oldVersion = await preferences.getVersion();
     MigrationData data = MigrationData(configMap: configMap);
-    if (version == 0 && configMap != null) {
+    if (_oldVersion == 0 && configMap != null) {
       data = await _oldToNow(configMap);
     }
     await preferences.setVersion(currentVersion);
     return data;
+  }
+
+  Future<void> rollback() async {
+    await preferences.setVersion(_oldVersion);
   }
 
   Future<MigrationData> _oldToNow(Map<String, Object?> configMap) async {

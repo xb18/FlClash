@@ -92,12 +92,6 @@ class GlobalState {
       final config = newConfigMap != null
           ? Config.fromJson(newConfigMap)
           : Config(themeProps: defaultThemeProps);
-      if (!stringAndObjectMapEntryIterableEquality.equals(
-        configMap?.entries,
-        newConfigMap?.entries,
-      )) {
-        await preferences.saveConfig(config);
-      }
       final configOverrides = buildConfigOverrides(config);
       await database.restore(
         migrationData.profiles,
@@ -118,6 +112,7 @@ class GlobalState {
       await window?.init(version, config.windowProps);
       return container;
     } catch (e) {
+      await migration.rollback();
       commonPrint.log('init failed $e');
       rethrow;
     }
