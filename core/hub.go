@@ -141,7 +141,7 @@ func handleChangeProxy(data string, fn func(string string)) {
 }
 
 func handleGetTraffic(onlyStatisticsProxy bool) string {
-	up, down := statistic.DefaultManager.Current(onlyStatisticsProxy)
+	up, down := statistic.DefaultManager.NowTraffic(onlyStatisticsProxy)
 	traffic := map[string]int64{
 		"up":   up,
 		"down": down,
@@ -155,7 +155,7 @@ func handleGetTraffic(onlyStatisticsProxy bool) string {
 }
 
 func handleGetTotalTraffic(onlyStatisticsProxy bool) string {
-	up, down := statistic.DefaultManager.Total(onlyStatisticsProxy)
+	up, down := statistic.DefaultManager.TotalTraffic(onlyStatisticsProxy)
 	traffic := map[string]int64{
 		"up":   up,
 		"down": down,
